@@ -1,79 +1,138 @@
-// creating references
-const inputValue = document.getElementById("inputValue");
-const button = document.querySelector(".btn");
-const main_todo = document.querySelector(".main_todo_list");
+const inputBox = document.getElementById('inputBox');
+const addBtn = document.getElementById('addBtn');
+const todoList = document.getElementById('todoList');
 
-const getTodoListFromLocal = () => {
-    return JSON.parse(localStorage.getItem("myTodoList")); // convert into original array form
-};
+let editTodo = null;
 
-const updateLocalStorage = (arr) => {
-    return localStorage.setItem("myTodoList",JSON.stringify(arr));
-};
+// Function to add todo
+const addTodo = () => {
+    const inputText = inputBox.value.trim();
+    if (inputText.length <= 0) {
+        alert("You must write something in your to do");
+        return false;
+    }
 
-let arr = getTodoListFromLocal() || []; // Global scope
+    if (addBtn.value === "Edit") {
+        // Passing the original text to editLocalTodos function before edit it in the todoList
+        editLocalTodos(editTodo.target.previousElementSibling.innerHTML);
+        editTodo.target.previousElementSibling.innerHTML = inputText;
+        addBtn.value = "Add";
+        inputBox.value = "";
+    }
+    else {
+        //Creating p tag
+        const li = document.createElement("li");
+        const p = document.createElement("p");
+        p.innerHTML = inputText;
+        li.appendChild(p);
 
-const addTodoDynamically = (curVal) => {
-    const divElement = document.createElement("div");
-    divElement.classList.add("sub_todo_list");
-    divElement.innerHTML = `<li>${curVal}</li>  <button class="deleteBtn">Delete</button>`;
-    main_todo.append(divElement);
+
+        // Creating Edit Btn
+        const editBtn = document.createElement("button");
+        editBtn.innerText = "Edit";
+        editBtn.classList.add("btn", "editBtn");
+        li.appendChild(editBtn);
+
+        // Creating Delete Btn
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Remove";
+        deleteBtn.classList.add("btn", "deleteBtn");
+        li.appendChild(deleteBtn);
+
+        todoList.appendChild(li);
+        inputBox.value = "";
+
+        saveLocalTodos(inputText);
+    }
 }
 
-const addTodoList = (e) => {
-    e.preventDefault(); // preventDefault() is used to stop the browser's default behavior for an event (like stopping form submission or link navigation).
-
-    const items = inputValue.value.trim().toLowerCase();
-
-    inputValue.value = "";
-
-    if(items != "" && !arr.includes(items)) {
-        arr.push(items);
-        arr = [...new Set(arr)]; // ... spread operator
-        console.log(arr);
-
-        localStorage.setItem("myTodoList", JSON.stringify(arr));
-
-        addTodoDynamically(items);
+// Function to update : (Edit/Delete) todo
+const updateTodo = (e) => {
+    if (e.target.innerHTML === "Remove") {
+        todoList.removeChild(e.target.parentElement);
+        deleteLocalTodos(e.target.parentElement);
     }
-};
 
-const showTodoList = () => {
-    console.log(arr);
-
-    arr.forEach((curVal) => {
-        addTodoDynamically(curVal);
-    });
-};
-
-// Show todos on page load
-showTodoList();
-
-const removeTodo = (e) => {
-    const deleteButton = e.target;
-    const parentDiv = deleteButton.parentElement; // this is the <div class="sub_todo_list">
-    const listItem = deleteButton.previousElementSibling; // this is the <li> element
-    const listContent = listItem.textContent.toLowerCase(); // text inside <li>
-
-    arr = arr.filter((curVal) => {
-        console.log(curVal);
-        return curVal != listContent;
-    });
-
-    updateLocalStorage(arr);
-    parentDiv.remove();
-
-    console.log(arr);
-};
-
-// remove list
-main_todo.addEventListener("click", (e) => {
-    e.preventDefault();
-    if(e.target.classList.contains("deleteBtn")) {
-        removeTodo(e);
+    if (e.target.innerHTML === "Edit") {
+        inputBox.value = e.target.previousElementSibling.innerHTML;
+        inputBox.focus();
+        addBtn.value = "Edit";
+        editTodo = e;
     }
-});
+}
 
-button.addEventListener("click", (e) => {
-    addTodoList(e);
-});
+// Function to save local todo
+const saveLocalTodos = (todo) => {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+        todos = [];
+    }
+    else {
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    todos.push(todo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// Function to get local todo
+const getLocalTodos = () => {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+        todos = [];
+    }
+    else {
+        todos = JSON.parse(localStorage.getItem("todos"));
+        todos.forEach(todo => {
+
+            //Creating p tag
+            const li = document.createElement("li");
+            const p = document.createElement("p");
+            p.innerHTML = todo;
+            li.appendChild(p);
+
+
+            // Creating Edit Btn
+            const editBtn = document.createElement("button");
+            editBtn.innerText = "Edit";
+            editBtn.classList.add("btn", "editBtn");
+            li.appendChild(editBtn);
+
+            // Creating Delete Btn
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "Remove";
+            deleteBtn.classList.add("btn", "deleteBtn");
+            li.appendChild(deleteBtn);
+
+            todoList.appendChild(li);
+        });
+    }
+}
+
+// Function to delete local todo
+const deleteLocalTodos = (todo) => {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+        todos = [];
+    }
+    else {
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+
+    let todoText = todo.children[0].innerHTML;
+    let todoIndex = todos.indexOf(todoText);
+    todos.splice(todoIndex, 1);
+    localStorage.setItem("todos", JSON.stringify(todos));
+    // Array functions : slice / splice
+    console.log(todoIndex);
+}
+
+const editLocalTodos = (todo) => {
+    let todos = JSON.parse(localStorage.getItem("todos"));
+    let todoIndex = todos.indexOf(todo);
+    todos[todoIndex] = inputBox.value;
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+document.addEventListener('DOMContentLoaded', getLocalTodos);
+addBtn.addEventListener('click', addTodo);
+todoList.addEventListener('click', updateTodo);
