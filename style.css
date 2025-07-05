@@ -1,115 +1,102 @@
-/* Body Styling */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
-    min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background-color: rgb(232, 238, 238);
+}
+
+.container{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-}
-
-/* Heading Styling */
-h1 {
-    font-size: 3rem;
-    text-align: center;
-    background: linear-gradient(to right, #ff416c, #ff4b2b);
-    -webkit-background-clip: text;
-    color: transparent;
-    position: relative;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
-
-/* Gradient underline */
-h1::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -10px;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(to right, #ff416c, #ff4b2b);
-    border-radius: 2px;
-}
-
-
-/* Form Container */
-form {
     margin-top: 20px;
-    background-color: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    width: 90%;
+}
+
+.input-container{
+    width: 100%;
     max-width: 500px;
+    text-align: center;
+    padding: 20px;
 }
 
-/* Input and Button Layout */
-form div {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-input[type="text"] {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.btn {
-    padding: 12px 20px;
-    font-size: 16px;
+.input-container input{
     border: none;
-    border-radius: 8px;
-    background: linear-gradient(to right, #56ccf2, #2f80ed);
-    color: white;
+    outline: none;
+    padding: 12px;
+    margin-block: 12px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.input-container input[type="text"]{
+    width: 70%;
+}
+
+.input-container input[type="button"]{
+    background-color: #3da33d;
+    color: #fff;
+    font-weight: 700;
+    margin-left: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    padding: 12px 24px;
 }
 
-.btn:hover {
-    background: linear-gradient(to right, #2f80ed, #56ccf2);
+.input-container input[type="button"]:hover{
+    background-color: #60b160;
 }
 
-/* Todo List Styling */
-.main_todo_list {
-    display: flex;
+ul{
+    width: 70%;
+    max-width: 450px;
+    /* display: flex;
+    justify-content: center;
     flex-direction: column;
-    gap: 12px;
+    align-items: center; */
 }
 
-.sub_todo_list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9fafb;
-    padding: 12px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.sub_todo_list li {
-    list-style: none;
-    font-size: 16px;
-    color: #333;
-}
-
-.deleteBtn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    background-color: #ff4e4e;
-    color: white;
+ul li{
+    list-style-type: none;
     cursor: pointer;
-    transition: background 0.3s ease;
+    margin-block-end: 12px;
+    border-radius: 8px;
+    border: 0.125px solid #a19f9f;
+    padding: 6px 12px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.5s;
 }
 
-.deleteBtn:hover {
-    background-color: #e60000;
+ul li:hover{
+    background-color: #cbcaca;
+}
+
+ul li p{
+    flex-grow: 1;
+    padding: 2px;
+}
+.btn{
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: none;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.deleteBtn{
+    color: #ff0000;
+}
+
+.editBtn{
+    color: #008000;
 }
